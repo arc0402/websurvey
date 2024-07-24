@@ -1,0 +1,63 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; /* Prevent scrolling of the entire page */
+}
+
+.navbar {
+  height: 60px; /* Ensure the navbar has a fixed height */
+  position: fixed; /* Fix the navbar to the top */
+  top: 0; /* Align to the top */
+  left: 0;
+  right: 0;
+  z-index: 1001; /* Ensure the navbar stays above the map */
+  padding: 0 15px; /* Add some horizontal padding */
+  box-sizing: border-box; /* Include padding in the height/width calculation */
+}
+
+#map {
+  position: absolute; /* Ensure the map is positioned relative to the body */
+  top: 60px; /* Position it right below the navbar */
+  left: 0;
+  right: 0;
+  bottom: 0; /* Ensure the map takes up the full remaining height */
+  height: calc(100% - 60px); /* Adjust height to account for navbar */
+  width: 100%; /* Full width */
+  z-index: 1; /* Ensure the map is behind other elements */
+}
+
+
+.recenter-button {
+  position: absolute;
+  top: 75px; /* Adjusted from top */
+  right: 10px;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 1000; /* Ensure button is above map tiles */
+}
+
+.leaflet-control-layers {
+  position: absolute; /* Positioning from left */
+  top: 80px; /* Positioning from top */
+  z-index: 1000; /* Ensure control is above map tiles */
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.save-location-button {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.form-container {
+  max-height: calc(100vh - 10px); /* Full height minus navbar */
+  overflow-y: auto;
+  padding-top: 100px;
+}

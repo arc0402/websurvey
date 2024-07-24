@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="calcite-bootstrap/dist/css/calcite-bootstrap-dark.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+  crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""></script>
+  <title>Map</title>
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button aria-controls="navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button> <a class="navbar-brand" href="#">GCS Survey App</a>
+      </div>
+      <div class="navbar-collapse collapse" id="navbar">
+        <ul class="nav navbar-nav">
+          <li class="active">
+            <a href="#">Home</a>
+          </li>
+          <li>
+            <a href="#about">About</a>
+          </li>
+          <li>
+            <a href="#contact">Contact</a>
+          </li>
+          <li class="dropdown">
+            <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">Dropdown <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="#">Action</a>
+              </li>
+              <li>
+                <a href="#">Another action</a>
+              </li>
+              <li>
+                <a href="#">Something else here</a>
+              </li>
+              <li class="divider" role="separator"></li>
+              <li class="dropdown-header">Nav header</li>
+              <li>
+                <a href="#">Separated link</a>
+              </li>
+              <li>
+                <a href="#">One more separated link</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div><!-- /.container -->
+  </nav><!-- /.navbar -->
+  <div id="map"></div>
+  <button class="btn btn-primary recenter-button" onclick="recenterMap()">Recenter</button>
+  <button class="btn btn-success save-location-button" onclick="saveLocation()">Save Location</button>
+  
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    var map = L.map('map');
+    var currentLocationMarker;
+    var currentLatLon;
+    
+    var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+    var Esri_WorldStreetMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
+    });
+    var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+    });
+    var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
+    var Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+      maxZoom: 16
+    });
+    var googleStreets = L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}',{
+      maxZoom: 20,
+      subdomains:['mt0','mt1','mt2','mt3']
+    });
+
+    var baseMaps = {
+      "Open Street Map": osm,
+      "Google Street Map": googleStreets,
+      "Gray Canvas Map": Esri_WorldGrayCanvas,
+      "Esri World Imagery": Esri_WorldImagery,
+      "Esri World Topo": Esri_WorldTopoMap,
+    };
+
+    function initializeMap() {
+      var defaultLayer = osm; // Set the default layer
+      defaultLayer.addTo(map);
+      
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(setViewToLocation, function() {
+          // On error, fallback to default location
+          setViewToLocation({});
+        });
+      } else {
+        // Browser doesn't support Geolocation
+        setViewToLocation({});
+      }
+
+      L.control.layers(baseMaps).addTo(map);
+    }
+
+    function setViewToLocation(position) {
+      var lat = position.coords ? position.coords.latitude : 24.8607; // Default to Karachi latitude
+      var lon = position.coords ? position.coords.longitude : 67.0011; // Default to Karachi longitude
+      currentLatLon = [lat, lon];
+
+      map.setView([lat, lon], 13);
+
+      if (currentLocationMarker) {
+        currentLocationMarker.setLatLng([lat, lon]);
+      } else {
+        currentLocationMarker = L.marker([lat, lon]).addTo(map)
+          .bindPopup('Your Location')
+          .openPopup();
+      }
+    }
+
+    function recenterMap() {
+      if (currentLatLon) {
+        map.setView(currentLatLon, 13);
+      } else {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(setViewToLocation, function() {
+            // On error, fallback to Karachi
+            setViewToLocation({});
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          setViewToLocation({});
+        }
+      }
+    }
+
+    function saveLocation() {
+      if (currentLatLon) {
+        var url = 'form.html?lat=' + currentLatLon[0] + '&lon=' + currentLatLon[1];
+        window.location.href = url;
+      } else {
+        alert("Current location is not available.");
+      }
+    }
+
+    initializeMap();
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="calcite-bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

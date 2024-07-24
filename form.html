@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="calcite-bootstrap/dist/css/calcite-bootstrap.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+  crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""></script>
+  <title>form</title>
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button aria-controls="navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button> <a class="navbar-brand" href="#">GCS Survey App</a>
+      </div>
+      <div class="navbar-collapse collapse" id="navbar">
+        <ul class="nav navbar-nav">
+          <li class="active">
+            <a href="#">Home</a>
+          </li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div><!-- /.container -->
+  </nav><!-- /.navbar -->
+  <div class="container form-container mt-5">
+    <h2 class="mb-4">Complaint Form</h2>
+    <form>
+        <div class="form-group">
+            <label for="link-id">Link ID/Name</label>
+            <input type="text" class="form-control" id="link-id" name="link-id">
+        </div>
+        <div class="form-group">
+            <label for="team-leader">Team Leader</label>
+            <input type="text" class="form-control" id="team-leader" name="team-leader">
+        </div>
+        <div class="form-group">
+            <label for="cable-in">Cable In/Tube In/Core In</label>
+            <input type="text" class="form-control" id="cable-in" name="cable-in">
+        </div>
+        <div class="form-group">
+            <label for="direction-in">Direction In</label>
+            <input type="text" class="form-control" id="direction-in" name="direction-in">
+        </div>
+        <div class="form-group">
+            <label for="cable-out">Cable Out/Tube Out/Core Out</label>
+            <input type="text" class="form-control" id="cable-out" name="cable-out">
+        </div>
+        <div class="form-group">
+            <label for="direction-out">Direction Out</label>
+            <input type="text" class="form-control" id="direction-out" name="direction-out">
+        </div>
+        <div class="form-group">
+            <label for="service-type">Service Type</label>
+            <input type="text" class="form-control" id="service-type" name="service-type">
+        </div>
+        <div class="form-group">
+            <label for="landmark">Landmark</label>
+            <input type="text" class="form-control" id="landmark" name="landmark">
+        </div>
+        <div class="form-group">
+          <button type="button" class="btn btn-primary">Landmark Image</button>
+          <button type="button" class="btn btn-primary">Point Image</button>
+        </div>
+        <div class="form-group">
+            <label for="joint-type">Joint Type</label>
+            <input type="text" class="form-control" id="joint-type" name="joint-type">
+        </div>
+        <div class="form-group">
+            <label for="joint-enclosure">Joint Enclosure</label>
+            <input type="text" class="form-control" id="joint-enclosure" name="joint-enclosure">
+        </div>
+        <div class="form-group">
+            <label for="odf-port">ODF Port</label>
+            <input type="text" class="form-control" id="odf-port" name="odf-port">
+        </div>
+        <div class="form-group">
+            <label for="pop-name">Pop Name</label>
+            <input type="text" class="form-control" id="pop-name" name="pop-name">
+        </div>
+        <div class="form-group">
+            <label for="survey-date">Survey Date</label>
+            <input type="date" class="form-control" id="survey-date" name="survey-date">
+        </div>
+        <div class="form-group">
+          <label for="comments">Comments</label>
+          <textarea class="form-control" id="comments" name="comments" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+</div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="calcite-bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
